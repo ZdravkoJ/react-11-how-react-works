@@ -21,27 +21,32 @@ const content = [
 export default function App() {
   return (
     <div>
-      <Tabbed content={content} />
+      <Tabs content={content} />
     </div>
   );
 }
 
-function Tabbed({ content }) {
-  const [activeTab, setActiveTab] = useState(0);
+console.log(<DifferentTabContent test={123} />);
+console.log(DifferentTabContent());
 
+function Tabs({ content }) {
+  const [activeTab, setActiveTab] = useState(0);
   return (
     <div>
       <div className="tabs">
         <Tab num={0} activeTab={activeTab} onClick={setActiveTab} />
         <Tab num={1} activeTab={activeTab} onClick={setActiveTab} />
         <Tab num={2} activeTab={activeTab} onClick={setActiveTab} />
-        <Tab num={3} activeTab={activeTab} onClick={setActiveTab} />
+        <Tab num={4} activeTab={activeTab} onClick={setActiveTab} />
       </div>
 
       {activeTab <= 2 ? (
-        <TabContent item={content.at(activeTab)} />
+        <TabContent
+          item={content.at(activeTab)}
+          key={content.at(activeTab).summary}
+        />
       ) : (
-        <DifferentContent />
+        <DifferentTabContent />
       )}
     </div>
   );
@@ -53,16 +58,16 @@ function Tab({ num, activeTab, onClick }) {
       className={activeTab === num ? "tab active" : "tab"}
       onClick={() => onClick(num)}
     >
-      Tab {num + 1}
+      TabBtn {num + 1}
     </button>
   );
 }
 
-function TabContent({ item }) {
+function TabContent({ item, key, activeTab, setActiveTab }) {
   const [showDetails, setShowDetails] = useState(true);
   const [likes, setLikes] = useState(0);
 
-  function handleInc() {
+  function handleLikes() {
     setLikes(likes + 1);
   }
 
@@ -78,7 +83,7 @@ function TabContent({ item }) {
 
         <div className="hearts-counter">
           <span>{likes} ❤️</span>
-          <button onClick={handleInc}>+</button>
+          <button onClick={handleLikes}>+</button>
           <button>+++</button>
         </div>
       </div>
@@ -91,7 +96,7 @@ function TabContent({ item }) {
   );
 }
 
-function DifferentContent() {
+function DifferentTabContent() {
   return (
     <div className="tab-content">
       <h4>I'm a DIFFERENT tab, so I reset state 💣💥</h4>
